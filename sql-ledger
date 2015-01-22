@@ -1,0 +1,32 @@
+Alias /sql-ledger /var/www/ledger123/ 
+<Directory /var/www/ledger123> 
+  AllowOverride All 
+  AddHandler cgi-script .pl 
+  Options ExecCGI Includes FollowSymlinks 
+  Order Allow,Deny 
+  Allow from All 
+</Directory> 
+<Directory /var/www/ledger123/users> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
+<Directory /var/www/ledger123/bin> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
+<Directory /var/www/ledger123/SL> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
+<Directory /var/www/ledger123/sql> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
+<Directory /var/www/ledger123/templates> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
+<Directory /var/www/ledger123/locale> 
+  Order Deny,Allow 
+  Deny from All 
+</Directory> 
