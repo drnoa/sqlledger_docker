@@ -14,12 +14,25 @@ ENV postrespassword docker
 #Packages 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-cert postgresql &&\
-libdbix-simple-perl libcgi-simple-perl libtext-markdown-perl libdbi-perl libdbd-pg-perl &&\
-libobject-signature-perl git-core gitweb postfix mailutils texlive nano libhtml-template-perl &&\  
-make cpan libtemplate-perl libnumber-format-perl libuser-simple-perl lynx libcgi-formbuilder-perl &&\
-libmime-lite-perl libtext-markdown-perl libdate-calc-perl libtemplate-plugin-number-format-perl &&\
-libgd-gd2-perl libdatetime-perl libhtml-format-perl libmime-tools-perl apg libgd2-xpm-dev build-essential
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-cert \
+    libdbix-simple-perl libcgi-simple-perl \
+    git postfix mailutils texlive nano libhtml-template-perl \
+    libtext-markdown-perl libdbi-perl  libdbd-pg-perl libobject-signature-perl \
+    make libtemplate-perl libnumber-format-perl \
+    libuser-simple-perl lynx libcgi-formbuilder-perl \
+    libmime-lite-perl libtext-markdown-perl libdate-calc-perl libtemplate-plugin-number-format-perl \
+    libgd-gd2-perl libdatetime-perl libhtml-format-perl libmime-tools-perl apg libgd2-xpm-dev build-essential
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libarchive-zip-perl libclone-perl \
+    libconfig-std-perl libdatetime-perl libdbd-pg-perl libdbi-perl \
+    libemail-address-perl  libemail-mime-perl libfcgi-perl libjson-perl \
+    liblist-moreutils-perl libnet-smtp-ssl-perl libnet-sslglue-perl \
+    libparams-validate-perl libpdf-api2-perl librose-db-object-perl \
+    librose-db-perl librose-object-perl libsort-naturally-perl libpq5 \
+    libstring-shellquote-perl libtemplate-perl libtext-csv-xs-perl \
+    libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl \
+    libfile-copy-recursive-perl postgresql git build-essential \
+    libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
 
