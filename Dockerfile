@@ -1,4 +1,5 @@
-FROM ubuntu:latest
+#FROM ubuntu:latest
+FROM debian:wheezy
 
 MAINTAINER Daniel Binggeli <db@xbe.ch>
 
