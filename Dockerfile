@@ -37,7 +37,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-lang-german
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-full
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-full
 
 #Install missing Perl Modules
 #RUN cpan HTML::Restrict
