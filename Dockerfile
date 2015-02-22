@@ -1,5 +1,5 @@
-#FROM ubuntu:latest
-FROM debian:wheezy
+FROM ubuntu:latest
+#FROM debian:wheezy
 
 MAINTAINER Daniel Binggeli <db@xbe.ch>
 
@@ -8,8 +8,6 @@ MAINTAINER Daniel Binggeli <db@xbe.ch>
 ENV postgresversion 9.1
 ENV locale de_DE
 ENV postrespassword docker
-
-
 
 
 #Packages 
@@ -24,7 +22,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-
     libmime-lite-perl libtext-markdown-perl libdate-calc-perl libtemplate-plugin-number-format-perl \
     libgd-gd2-perl libdatetime-perl libhtml-format-perl libmime-tools-perl apg libgd2-xpm-dev build-essential
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libarchive-zip-perl libclone-perl \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install ssh acpid git-core gitweb postfix mailutils texlive
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclone-perl \
     libconfig-std-perl libdatetime-perl libdbd-pg-perl libdbi-perl \
     libemail-address-perl  libemail-mime-perl libfcgi-perl libjson-perl \
     liblist-moreutils-perl libnet-smtp-ssl-perl libnet-sslglue-perl \
@@ -32,20 +32,22 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libarchive-zip-per
     librose-db-perl librose-object-perl libsort-naturally-perl libpq5 \
     libstring-shellquote-perl libtemplate-perl libtext-csv-xs-perl \
     libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl \
-    libfile-copy-recursive-perl postgresql git build-essential \
+    libfile-copy-recursive-perl git build-essential \
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
 
-#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-lang-german
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-full
 
 #Install missing Perl Modules
-RUN cpan HTML::Restrict
-RUN cpan CGI::FormBuilder DBIx::XHTML_Table
-RUN cpan GD
-RUN cpan GD::Thumbnail
-RUN cpan cpan MIME::Lite::TT::HTML
+#RUN cpan HTML::Restrict
+#RUN cpan CGI::FormBuilder DBIx::XHTML_Table
+#RUN cpan GD
+#RUN cpan GD::Thumbnail
+#RUN cpan cpan MIME::Lite::TT::HTML
 
 
-# ADD KIVITENDO
+# ADD ledger
 # Kivitendo intallation
 RUN git clone https://github.com/ledger123/ledger123.git /var/www/ledger123
 RUN git clone git://github.com/ledger123/ledgercart.git  /var/www/ledger123/ledgercart
