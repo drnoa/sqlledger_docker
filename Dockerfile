@@ -35,7 +35,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 libarchive-zip-per
     libfile-copy-recursive-perl postgresql git build-essential \
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
 
 #Install missing Perl Modules
 RUN cpan HTML::Restrict
