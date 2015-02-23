@@ -1,13 +1,12 @@
-kivitendo_docker
+SQL-Ledger_docker
 ================
 
-Docker Build for Kivitendo a erp solution for small businesses
+Docker Build for SQL-Ledger a erp solution for small businesses
 
 
 # Table of Contents
 
 - [Introduction](#introduction)
-- [Changelog](Changelog.md)
 - [Contributing](#contributing)
 - [Reporting Issues](#reporting-issues)
 - [Installation](#installation)
@@ -19,15 +18,15 @@ Docker Build for Kivitendo a erp solution for small businesses
 
 # Introduction
 
-Dockerfile to build a Kivitendo container image which can be linked to other containers.
-Will install Postgres and Apache2 and all the necessary packages for Kivitendo.
+Dockerfile to build a SQL-Ledger container image which can be linked to other containers.
+Will install Postgres and Apache2 and all the necessary packages for SQL-Ledger.
 
 # Contributing
 
 If you find this image useful here's how you can help:
 
 - Send a Pull Request with your awesome new features and bug fixes
-- Help new users with [Issues](https://github.com/drnoa/kivitendo_docker/issues) they may encounter
+- Help new users with [Issues](https://github.com/drnoa/SQLLedger_docker/issues) they may encounter
 
 # Reporting Issues
 
@@ -51,30 +50,30 @@ sudo apt-get install lxc-docker
 Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future. These builds are performed by the **Docker Trusted Build** service.
 
 ```bash
-docker pull drnoa/kivitendo_docker:latest
+docker pull drnoa/SQLLedger_docker:latest
 ```
 
 Alternately you can build the image yourself.
 
 ```bash
-git clone https://github.com/drnoa/kivitendo_docker.git
-cd kivitendo_docker
-docker build -t="$USER/kivitendo_docker" .
+git clone https://github.com/drnoa/SQLLedger_docker.git
+cd SQL-Ledger_docker
+docker build -t="$USER/SQLLedger_docker" .
 ```
 
 # Quick Start
 
-Run the Kivitendo image
+Run the SQL-Ledger image
 
 ```bash
-docker run --name kivitendo_docker -d drnoa/kivitendo_docker:latest
+docker run --name SQLLedger_docker -d drnoa/SQLLedger_docker:latest
 ```
 Check the ip of your docker container
 ```bash
 docker ps -q | xargs docker inspect | grep IPAddress | cut -d '"' -f 4
 ```
 
-Got to the administrative interface of kivitendo using the password: admin123 and configure the database. All database users (kivitendo and docker) use docker as password.
+Got to the administrative interface of SQL-Ledger using the password: admin123 and configure the database. All database users (SQL-Ledger and docker) use docker as password.
 
 Alternately you can fetch the password set for the `postgres` user from the container logs.
 
@@ -110,7 +109,7 @@ The updated run command looks like this.
 
 ```bash
 docker run --name postgresql -d \
-  -v /opt/postgresql/data:/var/lib/postgresql drnoa/kivitendo_docker:latest
+  -v /opt/postgresql/data:/var/lib/postgresql drnoa/SQLLedger_docker:latest
 ```
 
 This will make sure that the data stored in the database is not lost when the image is stopped and started again.
@@ -127,12 +126,12 @@ psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} pos
 
 ## Build container from Dockerfile
 You can build the container from the Dockerfile in
-https://github.com/drnoa/kivitendo_docker
+https://github.com/drnoa/SQL-Ledger_docker
 
 simply clone the git repo localy and then build
 ```bash
-git clone https://github.com/drnoa/kivitendo_docker.git
-cd kivitendo_docker
+git clone https://github.com/drnoa/SQLLedger_docker.git
+cd SQLLedger_docker
 sudo docker build .
 ```
 
@@ -141,7 +140,7 @@ for example the used postgressql version or the database locale (default ist de_
 Its also possible to change the postgred passwords.
 To change this paramters simply edit the Dockerfile and edit the following values:
 ```bash
-ENV postgresversion 9.3
+ENV postgresversion 9.1
 ENV locale de_CH
 ENV postrespassword docker
 ```
@@ -154,17 +153,17 @@ To upgrade to newer releases, simply follow this 3 step upgrade procedure.
 - **Step 1**: Stop the currently running image
 
 ```bash
-docker stop $USER/kivitendo_docker
+docker stop $USER/SQLLedger_docker
 ```
 
 - **Step 2**: Update the docker image.
 
 ```bash
-docker pull drnoa/kivitendo_docker:latest
+docker pull drnoa/SQLLedger_docker:latest
 ```
 
 - **Step 3**: Start the image
 
 ```bash
-docker run --name kivitendo_docker -d [OPTIONS] drnoa/kivitendo_docker:latest
+docker run --name SQLLedger_docker -d [OPTIONS] drnoa/SQLLedger_docker:latest
 ```
