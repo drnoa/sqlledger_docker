@@ -57,7 +57,7 @@ Alternately you can build the image yourself.
 
 ```bash
 git clone https://github.com/drnoa/SQLLedger_docker.git
-cd SQL-Ledger_docker
+cd SQLLedger_docker
 docker build -t="$USER/SQLLedger_docker" .
 ```
 
@@ -126,7 +126,7 @@ psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} pos
 
 ## Build container from Dockerfile
 You can build the container from the Dockerfile in
-https://github.com/drnoa/SQL-Ledger_docker
+https://github.com/drnoa/SQLLedger_docker
 
 simply clone the git repo localy and then build
 ```bash
