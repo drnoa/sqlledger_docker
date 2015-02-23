@@ -86,6 +86,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update &&\
     apt-get install -y python-software-properties software-properties-common  \
     postgresql-${postgresversion} postgresql-client-${postgresversion} postgresql-contrib-${postgresversion}
 
+RUN cd ~/ && wget http://www.sql-ledger-network.com/debian/pg_hba.conf --retr-symlinks=no && cp pg_hba.conf /etc/postgresql/${postgresversion}/main/
+RUN service postgresql restart
+
+
+
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-${postgresversion}`` package when it was ``apt-get installed``
 USER postgres
 
@@ -94,27 +99,26 @@ RUN pg_dropcluster --stop ${postgresversion} main && pg_createcluster --locale $
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
 # then create a database `docker` owned by the ``docker`` role.
-RUN    /etc/init.d/postgresql start &&\
+RUN /etc/init.d/postgresql start &&\
     psql --command "CREATE USER docker WITH SUPERUSER PASSWORD '${postrespassword}';" &&\
-    psql --command "CREATE USER sql-ledger WITH SUPERUSER PASSWORD '${postrespassword}';" &&\
-    createdb -O docker docker &&\
-    createdb -O sql-ledger sql-ledger
-RUN createdb ledgercart   
-
-RUN psql ledgercart < /var/www/ledger123/ledgercart/sql/ledgercart.sql
-RUN psql ledgercart < /var/www/ledger123/ledgercart/sql/schema.sql
-RUN psql -U postgres ledgercart < /var/www/ledger123/sql/Pg-custom_tables.sql
+    psql --command "CREATE USER sqlledger WITH SUPERUSER PASSWORD '${postrespassword}';" &&\
+     createdb -O docker docker &&\
+     createdb -O sqlledger ledgercart &&\
+    psql ledgercart < /var/www/ledger123/ledgercart/sql/ledgercart.sql &&\
+    psql ledgercart < /var/www/ledger123/ledgercart/sql/schema.sql &&\
+    psql ledgercart < /var/www/ledger123/sql/Pg-custom_tables.sql
+    
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible. 
-RUN echo "host	all	all	0.0.0.0/0	md5" >> /etc/postgresql/${postgresversion}/main/pg_hba.conf
+RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/${postgresversion}/main/postgresql.conf
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/${postgresversion}/main/pg_hba.conf
 
-# And add ``listen_addresses`` to ``/etc/postgresql/${postgresversion}/main/postgresql.conf``
-RUN sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "/etc/postgresql/${postgresversion}/main/postgresql.conf"
+RUN service postgresql restart 
+
 
 # Expose the PostgreSQL port
 EXPOSE 5432
-
 
 # ADD APACHE
 # Run the rest of the commands as the ``root`` user
@@ -143,7 +147,7 @@ RUN find /var/www -type f -exec chmod u+rw,g+rw,o+r {} +
 #Perl Modul im Apache laden
 RUN a2enmod cgi.load
 RUN a2ensite default-ssl
-RUN service apache2 reload
+RUN service apache2 start
 RUN a2enmod ssl
 
 EXPOSE 80
