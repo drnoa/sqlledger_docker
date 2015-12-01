@@ -5,15 +5,14 @@ MAINTAINER Daniel Binggeli <db@xbe.ch>
 
 # parameter 
 # Change this values to your preferences
-ENV postgresversion 9.1
+ENV postgresversion 9.3
 ENV locale de_DE
 ENV postrespassword docker
 
 
 #Packages 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN apt-get update
-RUN apt-get -y upgrade
+RUN apt-get update && apt-get -y upgrade
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-cert \
     libdbix-simple-perl libcgi-simple-perl \
     git postfix mailutils texlive nano libhtml-template-perl \
@@ -36,8 +35,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
     libfile-copy-recursive-perl git build-essential \
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-lang-german
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
 #RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-full
 
 #Install missing Perl Modules
@@ -146,10 +144,7 @@ RUN find /var/www -type f -exec chmod u+rw,g+rw,o+r {} +
 
 
 #Perl Modul im Apache laden
-RUN a2enmod cgi.load
-RUN a2ensite default-ssl
-RUN service apache2 start
-RUN a2enmod ssl
+RUN a2enmod cgi.load  && a2ensite default-ssl  && service apache2 start && a2enmod ssl && service apache2 restart
 
 EXPOSE 80
  
