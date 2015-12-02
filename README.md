@@ -50,7 +50,7 @@ sudo apt-get install lxc-docker
 Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future. These builds are performed by the **Docker Trusted Build** service.
 
 ```bash
-docker pull drnoa/SQLLedger_docker:latest
+docker pull drnoa/sqlledger_docker:latest
 ```
 
 Alternately you can build the image yourself.
@@ -58,7 +58,7 @@ Alternately you can build the image yourself.
 ```bash
 git clone https://github.com/drnoa/SQLLedger_docker.git
 cd SQLLedger_docker
-docker build -t="$USER/SQLLedger_docker" .
+docker build -t="$USER/sqlledger_docker" .
 ```
 
 # Quick Start
@@ -66,7 +66,7 @@ docker build -t="$USER/SQLLedger_docker" .
 Run the SQL-Ledger image
 
 ```bash
-docker run --name SQLLedger_docker -d drnoa/SQLLedger_docker:latest
+docker run --name sqlledger_docker -d drnoa/sqlledger_docker:latest
 ```
 Check the ip of your docker container
 ```bash
@@ -109,7 +109,7 @@ The updated run command looks like this.
 
 ```bash
 docker run --name postgresql -d \
-  -v /opt/postgresql/data:/var/lib/postgresql drnoa/SQLLedger_docker:latest
+  -v /opt/postgresql/data:/var/lib/postgresql drnoa/sqlledger_docker:latest
 ```
 
 This will make sure that the data stored in the database is not lost when the image is stopped and started again.
@@ -153,17 +153,17 @@ To upgrade to newer releases, simply follow this 3 step upgrade procedure.
 - **Step 1**: Stop the currently running image
 
 ```bash
-docker stop $USER/SQLLedger_docker
+docker stop $USER/sqlledger_docker
 ```
 
 - **Step 2**: Update the docker image.
 
 ```bash
-docker pull drnoa/SQLLedger_docker:latest
+docker pull drnoa/sqlledger_docker:latest
 ```
 
 - **Step 3**: Start the image
 
 ```bash
-docker run --name SQLLedger_docker -d [OPTIONS] drnoa/SQLLedger_docker:latest
+docker run --name sqlledger_docker -d [OPTIONS] drnoa/sqlledger_docker:latest
 ```
