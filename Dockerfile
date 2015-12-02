@@ -5,7 +5,7 @@ MAINTAINER Daniel Binggeli <db@xbe.ch>
 
 # parameter 
 # Change this values to your preferences
-ENV postgresversion 9.3
+ENV postgresversion 9.1
 ENV locale de_DE
 ENV postrespassword docker
 
