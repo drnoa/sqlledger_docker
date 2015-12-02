@@ -36,40 +36,40 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
-#RUN DEBIAN_FRONTEND=noninteractive apt-get -y install texlive-full
-
-#Install missing Perl Modules
-#RUN cpan HTML::Restrict
-#RUN cpan CGI::FormBuilder DBIx::XHTML_Table
-#RUN cpan GD
-#RUN cpan GD::Thumbnail
-#RUN cpan cpan MIME::Lite::TT::HTML
-
 
 # ADD ledger
-# Kivitendo intallation
-RUN git clone https://github.com/ledger123/ledger123.git /var/www/ledger123
-RUN git clone git://github.com/ledger123/ledgercart.git  /var/www/ledger123/ledgercart
+RUN git clone https://github.com/ledger123/ledger123.git /var/www/html/ledger123
+RUN git clone git://github.com/ledger123/ledgercart.git  /var/www/html/ledger123/ledgercart
 
-RUN mkdir /var/www/ledger123/spool
+RUN mkdir /var/www/html/ledger123/spool
 
 #Load default users
-RUN cd /var/www/ledger123/users && wget http://www.sql-ledger-network.com/debian/demo_users.tar.gz --retr-symlinks=no && tar -xvf demo_users.tar.gz
+RUN cd /var/www/html/ledger123/users && wget http://www.sql-ledger-network.com/debian/demo_users.tar.gz --retr-symlinks=no && tar -xvf demo_users.tar.gz
 #Load default Templates
-RUN cd /var/www/ledger123/ && wget http://www.sql-ledger-network.com/debian/demo_templates.tar.gz --retr-symlinks=no && tar -xvf demo_templates.tar.gz
+RUN cd /var/www/html/ledger123/ && wget http://www.sql-ledger-network.com/debian/demo_templates.tar.gz --retr-symlinks=no && tar -xvf demo_templates.tar.gz
 
 #Change permissions for webserver
-RUN chown -hR www-data.www-data /var/www/ledger123/users /var/www/ledger123/templates /var/www/ledger123/css /var/www/ledger123/spool
+RUN chown -hR www-data.www-data /var/www/html/ledger123/users /var/www/html/ledger123/templates /var/www/html/ledger123/css /var/www/html/ledger123/spool
 
-ADD sql-ledger.conf /var/www/ledger123/sql-ledger.conf
+ADD sql-ledger.conf /var/www/html/ledger123/sql-ledger.conf
 
-RUN cd /var/www/ledger123/users && git checkout -b rel3 origin/rel3
-RUN cd /var/www/ledger123/users && git checkout rel3
+RUN cd /var/www/html/ledger123/users && git checkout -b rel3 origin/rel3
+RUN cd /var/www/html/ledger123/users && git checkout rel3
 
-ADD index.html /var/www/index.html
+ADD index.html /var/www/html/index.html
 
 #Todo copy the conf to the repo
-RUN cp /var/www/ledger123/ledgercart/config-default.pl /var/www/ledger123/ledgercart/config.pl
+RUN cp /var/www/html/ledger123/ledgercart/config-default.pl /var/www/html/ledger123/ledgercart/config.pl
+
+RUN echo "AddHandler cgi-script .pl" >> /etc/apache2/apache2.conf
+RUN echo "Alias /ledger123/ /var/www/html/ledger123/" >> /etc/apache2/apache2.conf
+RUN echo "<Directory /var/www/html/ledger123>" >> /etc/apache2/apache2.conf
+RUN echo "Options ExecCGI Includes FollowSymlinks" >> /etc/apache2/apache2.conf
+RUN echo "</Directory>" >> /etc/apache2/apache2.conf
+RUN echo "<Directory /var/www/html/ledger123/users>" >> /etc/apache2/apache2.conf
+RUN echo "Order Deny,Allow" >> /etc/apache2/apache2.conf
+RUN echo "Deny from All" >> /etc/apache2/apache2.conf
+RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 
 
 # ADD POSTGRES
@@ -103,9 +103,9 @@ RUN /etc/init.d/postgresql start &&\
     psql --command "CREATE USER sqlledger WITH SUPERUSER PASSWORD '${postrespassword}';" &&\
      createdb -O docker docker &&\
      createdb -O sqlledger ledgercart &&\
-    psql ledgercart < /var/www/ledger123/ledgercart/sql/ledgercart.sql &&\
-    psql ledgercart < /var/www/ledger123/ledgercart/sql/schema.sql &&\
-    psql ledgercart < /var/www/ledger123/sql/Pg-custom_tables.sql
+    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/ledgercart.sql &&\
+    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/schema.sql &&\
+    psql ledgercart < /var/www/html/ledger123/sql/Pg-custom_tables.sql
     
 
 # Adjust PostgreSQL configuration so that remote connections to the
@@ -113,7 +113,7 @@ RUN /etc/init.d/postgresql start &&\
 RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/${postgresversion}/main/postgresql.conf
 RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/${postgresversion}/main/pg_hba.conf
 
-RUN service postgresql restart 
+#RUN service postgresql restart 
 
 
 # Expose the PostgreSQL port
@@ -136,11 +136,10 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
  
-RUN chown -R www-data:www-data /var/www
-RUN chmod u+rwx,g+rx,o+rx /var/www
-RUN find /var/www -type d -exec chmod u+rwx,g+rx,o+rx {} +
-RUN find /var/www -type f -exec chmod u+rw,g+rw,o+r {} +
-
+RUN chown -R www-data:www-data /var/www &&\
+    chmod u+rwx,g+rx,o+rx /var/www &&\
+    find /var/www -type d -exec chmod u+rwx,g+rx,o+rx {} + &&\
+    find /var/www -type f -exec chmod u+rw,g+rw,o+r {} +
 
 
 #Perl Modul im Apache laden
