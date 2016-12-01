@@ -78,7 +78,7 @@ Got to the administrative interface of SQL-Ledger using the password: admin123 a
 Alternately you can fetch the password set for the `postgres` user from the container logs.
 
 ```bash
-docker logs postgresql
+docker logs sqlledger_docker
 ```
 
 In the output you will notice the following lines with the password:
@@ -96,7 +96,7 @@ In the output you will notice the following lines with the password:
 To test if the postgresql server is working properly, try connecting to the server.
 
 ```bash
-psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} postgresql)
+psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} sqlledger_docker)
 ```
 
 # Configuration
@@ -108,7 +108,7 @@ For data persistence a volume should be mounted at `/var/lib/postgresql`.
 The updated run command looks like this.
 
 ```bash
-docker run --name postgresql -d \
+docker run --name sqlledger_docker -d \
   -v /opt/postgresql/data:/var/lib/postgresql drnoa/sqlledger-docker:latest
 ```
 
@@ -120,7 +120,7 @@ By default 'docker' is assigned as password for the postgres user.
 
 You can change the password of the postgres user
 ```bash
-psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} postgresql)
+psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} sqlledger_docker)
 \password postgres
 ```
 
