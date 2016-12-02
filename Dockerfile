@@ -33,7 +33,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
     libstring-shellquote-perl libtemplate-perl libtext-csv-xs-perl \
     libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl \
     libfile-copy-recursive-perl git build-essential \
-    libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential
+    libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential sudo
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
 
