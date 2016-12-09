@@ -38,7 +38,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
 
 # ADD ledger
-RUN git clone https://github.com/ledger123/ledger123.git /var/www/html/ledger123
+RUN git clone git://github.com/ledger123/ledger123.git /var/www/html/ledger123
 RUN git clone git://github.com/ledger123/ledgercart.git  /var/www/html/ledger123/ledgercart
 
 RUN mkdir /var/www/html/ledger123/spool
@@ -53,8 +53,8 @@ RUN chown -hR www-data.www-data /var/www/html/ledger123/users /var/www/html/ledg
 
 ADD sql-ledger.conf /var/www/html/ledger123/sql-ledger.conf
 
-RUN cd /var/www/html/ledger123/users && git checkout -b rel3 origin/rel3
-RUN cd /var/www/html/ledger123/users && git checkout rel3
+#RUN cd /var/www/html/ledger123/users && git checkout -b rel3 origin/rel3
+#RUN cd /var/www/html/ledger123/users && git checkout rel3
 
 ADD index.html /var/www/html/index.html
 
@@ -104,8 +104,9 @@ RUN /etc/init.d/postgresql start &&\
      createdb -O docker docker &&\
      createdb -O sqlledger ledgercart &&\
     psql ledgercart < /var/www/html/ledger123/ledgercart/sql/ledgercart.sql &&\
-    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/schema.sql &&\
-    psql ledgercart < /var/www/html/ledger123/sql/Pg-custom_tables.sql
+    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/schema.sql 
+#&&\
+#    psql ledgercart < /var/www/html/ledger123/sql/Pg-custom_tables.sql
     
 
 # Adjust PostgreSQL configuration so that remote connections to the
@@ -113,7 +114,7 @@ RUN /etc/init.d/postgresql start &&\
 RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/${postgresversion}/main/postgresql.conf
 RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/${postgresversion}/main/pg_hba.conf
 
-#RUN service postgresql restart 
+RUN service postgresql restart 
 
 
 # Expose the PostgreSQL port
