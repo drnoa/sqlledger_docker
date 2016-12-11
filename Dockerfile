@@ -20,11 +20,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-
     make libtemplate-perl libnumber-format-perl \
     libuser-simple-perl lynx libcgi-formbuilder-perl \
     libmime-lite-perl libtext-markdown-perl libdate-calc-perl libtemplate-plugin-number-format-perl \
-    libgd-gd2-perl libdatetime-perl libhtml-format-perl libmime-tools-perl apg libgd2-xpm-dev build-essential
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install ssh acpid git-core gitweb postfix mailutils texlive
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclone-perl \
+    libgd-gd2-perl libdatetime-perl libhtml-format-perl libmime-tools-perl apg libgd2-xpm-dev build-essential \
+    ssh acpid git-core gitweb postfix mailutils texlive \
+    libarchive-zip-perl libclone-perl \
     libconfig-std-perl libdatetime-perl libdbd-pg-perl libdbi-perl \
     libemail-address-perl  libemail-mime-perl libfcgi-perl libjson-perl \
     liblist-moreutils-perl libnet-smtp-ssl-perl libnet-sslglue-perl \
@@ -34,7 +32,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libarchive-zip-perl libclo
     libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl \
     libfile-copy-recursive-perl git build-essential \
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential sudo
-
+    
+# ADD language environment
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
 
 # ADD ledger
@@ -50,11 +49,6 @@ RUN cd /var/www/html/ledger123/ && wget http://www.sql-ledger-network.com/debian
 
 #Change permissions for webserver
 RUN chown -hR www-data.www-data /var/www/html/ledger123/users /var/www/html/ledger123/templates /var/www/html/ledger123/css /var/www/html/ledger123/spool
-
-ADD sql-ledger.conf /var/www/html/ledger123/sql-ledger.conf
-
-#RUN cd /var/www/html/ledger123/users && git checkout -b rel3 origin/rel3
-#RUN cd /var/www/html/ledger123/users && git checkout rel3
 
 ADD index.html /var/www/html/index.html
 
@@ -88,8 +82,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update &&\
 RUN cd ~/ && wget http://www.sql-ledger-network.com/debian/pg_hba.conf --retr-symlinks=no && cp pg_hba.conf /etc/postgresql/${postgresversion}/main/
 RUN service postgresql restart
 
-
-
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-${postgresversion}`` package when it was ``apt-get installed``
 USER postgres
 
@@ -104,10 +96,7 @@ RUN /etc/init.d/postgresql start &&\
      createdb -O docker docker &&\
      createdb -O sqlledger ledgercart &&\
     psql ledgercart < /var/www/html/ledger123/ledgercart/sql/ledgercart.sql &&\
-    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/schema.sql 
-#&&\
-#    psql ledgercart < /var/www/html/ledger123/sql/Pg-custom_tables.sql
-    
+    psql ledgercart < /var/www/html/ledger123/ledgercart/sql/schema.sql     
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible. 
@@ -115,7 +104,6 @@ RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql
 RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/${postgresversion}/main/pg_hba.conf
 
 RUN service postgresql restart 
-
 
 # Expose the PostgreSQL port
 EXPOSE 5432
