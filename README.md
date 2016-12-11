@@ -81,17 +81,6 @@ Alternately you can fetch the password set for the `postgres` user from the cont
 docker logs sqlledger_docker
 ```
 
-In the output you will notice the following lines with the password:
-
-```bash
-|------------------------------------------------------------------|
-| PostgreSQL User: postgres, Password: xxxxxxxxxxxxxx              |
-|                                                                  |
-| To remove the PostgreSQL login credentials from the logs, please |
-| make a note of password and then delete the file pwfile          |
-| from the data store.                                             |
-|------------------------------------------------------------------|
-```
 
 To test if the postgresql server is working properly, try connecting to the server.
 
