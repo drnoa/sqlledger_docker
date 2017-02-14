@@ -6,7 +6,7 @@ MAINTAINER Daniel Binggeli <db@xbe.ch>
 # parameter 
 # Change this values to your preferences
 ENV postgresversion 9.1
-ENV locale de_DE
+ENV locale es_ES
 ENV postrespassword docker
 
 
@@ -34,7 +34,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install acpid apache2 openssl ssl-
     libgd-gd2-perl libimage-info-perl sed supervisor libgd2-xpm-dev build-essential sudo
     
 # ADD language environment
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-de-base texlive-lang-german
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install language-pack-es-base texlive-lang-spanish
 
 # ADD ledger
 RUN git clone git://github.com/ledger123/ledger123.git /var/www/html/ledger123
