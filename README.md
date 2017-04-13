@@ -73,7 +73,7 @@ Check the ip of your docker container
 docker ps -q | xargs docker inspect | grep IPAddress | cut -d '"' -f 4
 ```
 
-Got to the administrative interface of SQL-Ledger using the password: admin123 and configure the database. All database users (SQL-Ledger and docker) use docker as password.
+Got to the administrative interface of SQL-Ledger (e.g. http://172.17.0.3/ledger123/admin.pl) using the password: admin123 and configure the database. All database users (SQL-Ledger and docker) use docker as password.
 
 Alternately you can fetch the password set for the `postgres` user from the container logs.
 
