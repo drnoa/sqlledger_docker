@@ -78,7 +78,7 @@ Got to the administrative interface of SQL-Ledger (e.g. http://172.17.0.3/ledger
 Alternately you can fetch the password set for the `postgres` user from the container logs.
 
 ```bash
-docker logs sqlledger_docker
+docker logs <container-id>
 ```
 
 
