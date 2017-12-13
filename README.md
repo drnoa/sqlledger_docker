@@ -58,7 +58,7 @@ Alternately you can build the image yourself.
 ```bash
 git clone https://github.com/drnoa/SQLLedger_docker.git
 cd SQLLedger_docker
-docker build -t="$USER/sqlledger_docker" .
+docker build -t="<name_of_your_container>" .
 ```
 
 # Quick Start
@@ -97,7 +97,7 @@ For data persistence a volume should be mounted at `/var/lib/postgresql`.
 The updated run command looks like this.
 
 ```bash
-docker run --name sqlledger_docker -d \
+docker run --name <name_of_your_container> -d \
   -v /opt/postgresql/data:/var/lib/postgresql drnoa/sqlledger-docker:latest
 ```
 
@@ -109,7 +109,7 @@ By default 'docker' is assigned as password for the postgres user.
 
 You can change the password of the postgres user
 ```bash
-psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} sqlledger_docker)
+psql -U postgres -h $(docker inspect --format {{.NetworkSettings.IPAddress}} <name_of_your_container>)
 \password postgres
 ```
 
@@ -142,7 +142,7 @@ To upgrade to newer releases, simply follow this 3 step upgrade procedure.
 - **Step 1**: Stop the currently running image
 
 ```bash
-docker stop $USER/sqlledger_docker
+docker stop <name_of_your_container>
 ```
 
 - **Step 2**: Update the docker image.
@@ -154,5 +154,5 @@ docker pull drnoa/sqlledger_docker:latest
 - **Step 3**: Start the image
 
 ```bash
-docker run --name sqlledger_docker -d [OPTIONS] drnoa/sqlledger_docker:latest
+docker run --name <name_of_your_container> -d [OPTIONS] drnoa/sqlledger_docker:latest
 ```
